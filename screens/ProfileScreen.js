@@ -7,6 +7,8 @@ import {
   View,
   Modal,
   StatusBar,
+  Image,
+  ImageBackground,
 } from 'react-native';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-native-feather';
@@ -18,7 +20,7 @@ const Header = ({logOut}) => {
     <View
       style={{
         alignSelf: 'flex-start',
-        backgroundColor: Colors.primary,
+        backgroundColor: 'white ',
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
@@ -33,14 +35,6 @@ const Header = ({logOut}) => {
         />
         <Text style={styles.topHeader}>Profile</Text>
       </View>
-      <TouchableOpacity onPress={logOut}>
-        <Icon.LogOut
-          width={25}
-          height={25}
-          stroke={Colors.dark}
-          style={{marginBottom: 10, marginLeft: 7, marginRight: 20}}
-        />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -57,7 +51,7 @@ const InfoCard = ({
   React.useEffect(() => {
     Animated.timing(animatedHeight, {
       toValue: isExpanded ? 420 : 60,
-      duration: 100,
+      duration: 200,
       useNativeDriver: false,
     }).start();
   }, [isExpanded]);
@@ -134,7 +128,7 @@ const InfoCard = ({
   );
 };
 
-export default function ProfileScreen({navigationMain,navigation}) {
+export default function ProfileScreen({navigationMain, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInfoCardExpanded, setInfoCardExpanded] = useState(false);
   const {logout, userData} = useUser();
@@ -153,7 +147,7 @@ export default function ProfileScreen({navigationMain,navigation}) {
   };
 
   return (
-    <View style={{height:'100%',backgroundColor:'white'}}>
+    <ImageBackground source={require('../TestImages/profilebg.png')} style={{height: '100%', backgroundColor: 'white'}}>
       <StatusBar
         animated={true}
         barStyle={'dark-content'}
@@ -161,19 +155,25 @@ export default function ProfileScreen({navigationMain,navigation}) {
         hidden={false}
       />
       <Header logOut={logOut} />
+      {/* {userData?.username} */}
+      {/* {userData?.city},{userData?.state} */}
       <View style={styles.header}>
-        <Icon.User
-          stroke={Colors.dark}
-          width={100}
-          height={100}
-          strokeWidth={1}
-          style={styles.profileImage}
+        <Image
+          source={require('../TestImages/pfp.jpg')}
+          style={styles.pfp}
+          resizeMode="contain"
         />
-        <Text style={styles.profileName}>{userData?.username}</Text>
-        <Text style={styles.profileLocation}>
-          {userData?.city},{userData?.state}
-        </Text>
+        <View
+          style={{
+            marginLeft: 20,
+            paddingTop:10
+          }}>
+          <Text style={styles.welcomeText}>Welcome</Text>
+          <Text style={styles.profileName}>Alex James</Text>
+
+        </View>
       </View>
+
       <ScrollView contentContainerStyle={styles.buttonContainer}>
         <InfoCard
           userData={userData}
@@ -182,7 +182,9 @@ export default function ProfileScreen({navigationMain,navigation}) {
           isInfoCardExpanded={isInfoCardExpanded}
           toggleModal={toggleModal}
         />
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Wishlist')}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Wishlist')}>
           <Icon.Heart
             height={25}
             width={25}
@@ -192,8 +194,8 @@ export default function ProfileScreen({navigationMain,navigation}) {
           <Text style={styles.infoHeaderButtonText}>Wishlist</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button,{}]}>
-        <Icon.Key
+        <TouchableOpacity style={[styles.button, {}]}>
+          <Icon.Key
             height={25}
             width={25}
             stroke={Colors.dark}
@@ -203,7 +205,7 @@ export default function ProfileScreen({navigationMain,navigation}) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button}>
-        <Icon.MessageCircle
+          <Icon.MessageCircle
             height={25}
             width={25}
             stroke={Colors.dark}
@@ -212,8 +214,8 @@ export default function ProfileScreen({navigationMain,navigation}) {
           <Text style={styles.infoHeaderButtonText}>FAQ</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
-        <Icon.MapPin
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Store')}>
+          <Icon.MapPin
             height={25}
             width={25}
             stroke={Colors.dark}
@@ -222,14 +224,16 @@ export default function ProfileScreen({navigationMain,navigation}) {
           <Text style={styles.infoHeaderButtonText}>Store</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button,{backgroundColor:'red'}]}>
-        <Icon.Trash
+        <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]}>
+          <Icon.Trash
             height={25}
             width={25}
             stroke={'white'}
             style={{marginRight: 15, marginLeft: 6}}
           />
-          <Text style={[styles.infoHeaderButtonText,{color:'white'}]}>Delete Account</Text>
+          <Text style={[styles.infoHeaderButtonText, {color: 'white'}]}>
+            Delete Account
+          </Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -244,7 +248,7 @@ export default function ProfileScreen({navigationMain,navigation}) {
           </View>
         </View>
       </Modal>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -253,13 +257,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
-    backgroundColor:'white'
+    backgroundColor: 'white',
   },
   header: {
     width: '100%',
-    backgroundColor: Colors.primary,
+    backgroundColor: 'transparent',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: 20,
+    flexDirection: 'row',
+    paddingHorizontal: 20,
   },
   profileImage: {
     height: 110,
@@ -268,9 +274,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   profileName: {
-    fontSize: 20,
+    fontSize: 25,
     color: Colors.dark,
     fontFamily: 'Poppins-SemiBold',
+    marginTop:-10
   },
   profileLocation: {
     fontSize: 12,
@@ -385,7 +392,19 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     padding: 10,
-    backgroundColor:'white',
-    paddingTop:20,
+    backgroundColor: 'transparent',
+    paddingTop: 20,
   },
+  pfp: {
+    height: 100,
+    width: 100,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: Colors.dark,
+  },
+  welcomeText:{
+    color:Colors.dark,
+    fontSize:15,
+    fontFamily:'Poppins-Medium'
+  }
 });

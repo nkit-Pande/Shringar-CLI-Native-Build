@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {
+  Alert,
   Dimensions,
   FlatList,
   Image,
@@ -11,11 +12,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import StepIndicator from 'react-native-step-indicator';
 import {Colors} from '../color';
 import ItemCard from '../components/ItemCard';
 import * as Icon from 'react-native-feather';
 import {useProduct} from '../context/productContext';
+import SkeletonItemCard from '../components/SkeletonItemCard';
+
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -40,30 +44,26 @@ const dummyProduct = {
   price: 320,
 };
 
-const renderCarousel = ({item}) => {
-  return (
-    <View>
-      <Image
-        source={item.image}
-        style={{width: screenWidth, height: 210}}
-        resizeMode="cover"
-      />
-    </View>
-  );
-};
+const renderCarousel = ({item}) => (
+  <View>
+    <Image
+      source={item.image}
+      style={{width: screenWidth, height: 210}}
+      resizeMode="cover"
+    />
+  </View>
+);
 
-const CategoryCard = ({name}) => {
-  return (
-    <View style={styles.categoryCardContainer}>
-      <Image
-        source={require('../TestImages/dummy.jpg')}
-        resizeMode="cover"
-        style={styles.categoryImage}
-      />
-      <Text style={styles.categoryCardText}>{name}</Text>
-    </View>
-  );
-};
+const CategoryCard = ({name}) => (
+  <View style={styles.categoryCardContainer}>
+    <Image
+      source={require('../TestImages/dummy.jpg')}
+      resizeMode="cover"
+      style={styles.categoryImage}
+    />
+    <Text style={styles.categoryCardText}>{name}</Text>
+  </View>
+);
 
 const Carousel = ({currentPosition, setCurrentPosition}) => {
   const flatListRef = useRef(null);
@@ -116,87 +116,80 @@ const Carousel = ({currentPosition, setCurrentPosition}) => {
   );
 };
 
-const Header = () => {
-  return (
-    <View style={{backgroundColor: Colors.primary, padding: 10}}>
-      <Text style={styles.headerText}>
-        <Text
-          style={{
-            color: Colors.e_orange,
-            fontSize: 60,
-            fontFamily: 'GreatVibes-Regular',
-          }}>
-          S
-        </Text>
-        hringar
+const Header = () => (
+  <View style={{backgroundColor: Colors.primary, padding: 10}}>
+    <Text style={styles.headerText}>
+      <Text
+        style={{
+          color: Colors.e_orange,
+          fontSize: 60,
+          fontFamily: 'GreatVibes-Regular',
+        }}>
+        S
       </Text>
-      <Text style={styles.subHeaderText}>Madhya Pradesh</Text>
-      <Text style={styles.headerBodyText} numberOfLines={5}>
-        Family-favorite sparkle, timeless treasures, and welcoming service
-        await!
-      </Text>
-      <Image source={require('../TestImages/nobg.jpg')}   
+      hringar
+    </Text>
+    <Text style={styles.subHeaderText}>Madhya Pradesh</Text>
+    <Text style={styles.headerBodyText} numberOfLines={5}>
+      Family-favorite sparkle, timeless treasures, and welcoming service await!
+    </Text>
+    <Image
+      source={require('../TestImages/nobg.jpg')}
       style={{
-        height:100,
-        width:100,
-        position:'absolute',
-        left:30,
-        top:10, 
-      }} 
-      />
+        height: 100,
+        width: 100,
+        position: 'absolute',
+        left: 30,
+        top: 10,
+      }}
+    />
+  </View>
+);
 
-    </View>
-  );
-};
-
-const SearchBar = () => {
-  return (
-    <View style={styles.searchContainer}>
-      <Icon.Search height={25} width={25} stroke={Colors.dark} />
-      <TextInput
-        placeholder="Search"
-        placeholderTextColor={'grey'}
-        style={styles.searchInput}
-      />
-      <View style={styles.verticleLine} />
-      <TouchableOpacity onPress={() => alert('Option Clicked')}>
-        <Icon.Filter height={20} width={20} stroke={Colors.dark} />
-      </TouchableOpacity>
-    </View>
-  );
-};
+const SearchBar = () => (
+  <View style={styles.searchContainer}>
+    <Icon.Search height={25} width={25} stroke={Colors.dark} />
+    <TextInput
+      placeholder="Search"
+      placeholderTextColor={'grey'}
+      style={styles.searchInput}
+    />
+    <View style={styles.verticleLine} />
+    <TouchableOpacity onPress={() => alert('Option Clicked')} style={{paddingLeft:5}} >
+      <Icon.Filter height={20} width={20} stroke={Colors.dark} />
+    </TouchableOpacity>
+  </View>
+);
 
 export default function DashBoard({navigation}) {
   const [currentPosition, setCurrentPosition] = useState(0);
   const {products, page, setPage, getProductByCategory, getProductByMaterial} =
     useProduct();
-  // ["Earrings", "Bracelets", "Rings", "Mangalsutra", "chain", "Necklaces", "Ring", "Chains"]
+
   const categories = [
-    {
-      id: 1,
-      name: 'Rings',
-    },
-    {
-      id: 2,
-      name: 'Earrings',
-    },
-    {
-      id: 3,
-      name: 'Bracelets',
-    },
-    {
-      id: 4,
-      name: 'Mangalsutra',
-    },
-    {
-      id: 5,
-      name: 'Chains',
-    },
-    {
-      id: 6,
-      name: 'Necklaces',
-    },
+    {id: 1, name: 'Rings'},
+    {id: 2, name: 'Earrings'},
+    {id: 3, name: 'Bracelets'},
+    {id: 4, name: 'Mangalsutra'},
+    {id: 5, name: 'Chains'},
+    {id: 6, name: 'Necklaces'},
   ];
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert(
+          "No Internet Connection",
+          "Please check your internet connection and try again.",
+          [{ text: "OK" }]
+        );
+      }
+      console.log(state.type);
+      console.log(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -209,15 +202,9 @@ export default function DashBoard({navigation}) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         horizontal={false}
-        stickyHeaderIndices={[1]} // Index of the SearchBar to make it sticky
-      >
+        stickyHeaderIndices={[1]}>
         <Header />
-        <View
-          style={{
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            backgroundColor: Colors.primary,
-          }}>
+        <View style={{paddingVertical: 10, paddingHorizontal: 10, backgroundColor: Colors.primary}}>
           <SearchBar />
         </View>
         <Carousel
@@ -230,21 +217,20 @@ export default function DashBoard({navigation}) {
             <Text style={styles.majorHeader}>Most Gifted</Text>
             <View style={styles.divider} />
           </View>
-          <View>
-            <FlatList
-              style={{width: '100%'}}
-              data={products}
-              renderItem={({item}) => (
+          <FlatList
+            style={{width: '100%'}}
+            data={products.length > 0 ? products : Array.from({length: 10})}
+            renderItem={({item}) =>
+              products.length > 0 ? (
                 <ItemCard product={item} navigation={navigation} />
-              )}
-              showsVerticalScrollIndicator={false}
-              horizontal
-              contentContainerStyle={{
-                paddingLeft: 10,
-                paddingRight: 10,
-              }}
-            />
-          </View>
+              ) : (
+                <SkeletonItemCard />
+              )
+            }
+            showsVerticalScrollIndicator={false}
+            horizontal
+            contentContainerStyle={{paddingLeft: 10, paddingRight: 10}}
+          />
         </View>
         {/* Shop by Category */}
         <View style={styles.shopCatContainer}>
@@ -254,7 +240,7 @@ export default function DashBoard({navigation}) {
           </View>
           <View style={styles.categoryCardGroup}>
             {categories.map(category => (
-              <CategoryCard name={category.name} />
+              <CategoryCard key={category.id} name={category.name} />
             ))}
           </View>
         </View>
@@ -264,21 +250,20 @@ export default function DashBoard({navigation}) {
             <Text style={styles.majorHeader}>Most Gifted</Text>
             <View style={styles.divider} />
           </View>
-          <View>
-            <FlatList
-              style={{width: '100%'}}
-              data={products}
-              renderItem={({item}) => (
+          <FlatList
+            style={{width: '100%'}}
+            data={products.length > 0 ? products : Array.from({length: 10})}
+            renderItem={({item}) =>
+              products.length > 0 ? (
                 <ItemCard product={item} navigation={navigation} />
-              )}
-              showsVerticalScrollIndicator={false}
-              horizontal
-              contentContainerStyle={{
-                paddingLeft: 10,
-                paddingRight: 10,
-              }}
-            />
-          </View>
+              ) : (
+                <SkeletonItemCard />
+              )
+            }
+            showsVerticalScrollIndicator={false}
+            horizontal
+            contentContainerStyle={{paddingLeft: 10, paddingRight: 10}}
+          />
         </View>
       </ScrollView>
     </View>

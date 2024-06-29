@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useEffect} from 'react';
 import {RadioButton} from 'react-native-paper';
 import API from '../api/axios.config';
 import {
@@ -26,7 +26,7 @@ import {useToast} from 'react-native-toast-notifications';
 
 const labels = ['Cart', 'Delivery', 'Payment'];
 const count = [1, 2, 3, 4, 5, 6];
-export default function CartScreen({navigation}) {
+export default function CartScreen({navigation,route}) {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [checked, setChecked] = useState('first');
@@ -36,12 +36,19 @@ export default function CartScreen({navigation}) {
   const shipping = 50;
   const [isProcessing, setIsProcessing] = useState(false);
   const {userData} = useUser();
+  const [fromOrder, setFromOrder] = useState(false);
 
+  useEffect(() => {
+    if (route?.params?.fromOrder) {
+      setFromOrder(true);
+    } else {
+      setFromOrder(false);
+    }
+  }, [route]);
   // RazorpayCheckout.setApiKey('rzp_test_Cta71iRSfU5Jmj');
   const items = cartData.items;
   // console.log(userData)
   const toast = useToast();
-
   const showToast = message => {
     toast.show(message, {
       type: 'custom',
@@ -182,7 +189,11 @@ export default function CartScreen({navigation}) {
 
   const handleBack = () => {
     if (currentStep === 0) {
-      navigation.goBack();
+      if(fromOrder){
+        navigation.jumpTo('Order')
+      }else{
+        navigation.goBack()
+      }
     } else {
       setCurrentStep(prevStep => (prevStep > 0 ? prevStep - 1 : prevStep));
     }
@@ -193,7 +204,7 @@ export default function CartScreen({navigation}) {
       <StatusBar
         animated={true}
         barStyle={'dark-content'}
-        backgroundColor={'white'}
+        backgroundColor={Colors.primary}
         hidden={false}
       />
       <Header

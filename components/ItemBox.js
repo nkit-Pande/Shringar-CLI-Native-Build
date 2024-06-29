@@ -4,13 +4,15 @@ import { Colors } from "../color";
 import * as Icon from "react-native-feather";
 import { useCart } from "../context/cartContext";
 import { useWishlist } from "../context/wishlistContext";
-export default function ItemBox({ item, showRemove=false, showQuantity=false }) {
+
+export default function ItemBox({ item, showRemove=false, showQuantity=false, showShadow=true }) {
   const [counter, changeCounter] = useState(1);
   const hw = 25;
   const [ratingColor, setRatingColor] = useState("green");
   const { deleteItem, increment, decrement } = useCart();
   const { deleteItemFromWishlist } = useWishlist();
   const avgRating = item.avg_rating ? item.avg_rating : 0.0;
+
   const handleDecrease = () => {
     if (counter > 1) {
       decrement(item.product_id);
@@ -19,6 +21,7 @@ export default function ItemBox({ item, showRemove=false, showQuantity=false }) 
       deleteItem(item.product_id);
     }
   };
+
   const removeItem = (item) => {
     deleteItemFromWishlist(item.product_id);
   };
@@ -51,7 +54,7 @@ export default function ItemBox({ item, showRemove=false, showQuantity=false }) 
 
   return (
     <View style={{ flexDirection: "row" }}>
-      <View style={styles.container}>
+      <View style={[styles.container, showShadow ? styles.shadow : null]}>
         <Image style={styles.image} source={item.image_url ? {uri: item.image_url}: require('../TestImages/dummy.jpg')} />
         <View style={styles.outerBox}>
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
@@ -127,13 +130,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginHorizontal: 10,
     marginVertical: 5,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  shadow: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
-    borderRadius: 5,
-    alignItems: "center",
   },
   image: {
     height: 80,
@@ -164,7 +169,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     fontSize: 15,
     fontWeight: "bold",
-    color:Colors.dark
+    color: Colors.dark
   },
   counterBox: {
     flexDirection: "row",
@@ -215,11 +220,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     marginEnd: 3,
   },
-  quantityText:{
-    fontFamily:'Poppins-Medium',
-    color:Colors.dark,
-    fontSize:14,
-    paddingBottom:10,
-    paddingTop:4
+  quantityText: {
+    fontFamily: 'Poppins-Medium',
+    color: Colors.dark,
+    fontSize: 14,
+    paddingBottom: 10,
+    paddingTop: 4
   }
 });

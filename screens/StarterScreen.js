@@ -47,11 +47,11 @@ export default function StarterScreen({ navigation }) {
           const IconComponent = Icon[iconName];
           return <IconComponent color={color} size={size} />;
         },
-        tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: '#BCBDBF',
+        tabBarActiveTintColor: Colors.dark,
+        tabBarInactiveTintColor: Colors.charcoal,
         tabBarHideOnKeyboard: true,
         tabBarStyle: { 
-          backgroundColor: Colors.e_orange,
+          backgroundColor:'white',
           display: route.name === 'Cart' ? 'none' : 'flex',
         },
         tabBarLabelStyle:{
