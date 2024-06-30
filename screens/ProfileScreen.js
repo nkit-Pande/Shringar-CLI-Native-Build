@@ -140,7 +140,7 @@ export default function ProfileScreen({navigationMain, navigation}) {
   const toggleInfoCard = () => {
     setInfoCardExpanded(!isInfoCardExpanded);
   };
-
+  console.log(userData)
   const logOut = () => {
     logout();
     navigationMain.replace('Welcome');
@@ -169,7 +169,7 @@ export default function ProfileScreen({navigationMain, navigation}) {
             paddingTop:10
           }}>
           <Text style={styles.welcomeText}>Welcome</Text>
-          <Text style={styles.profileName}>Alex James</Text>
+          <Text style={styles.profileName}>{userData?.username}</Text>
 
         </View>
       </View>
@@ -224,15 +224,15 @@ export default function ProfileScreen({navigationMain, navigation}) {
           <Text style={styles.infoHeaderButtonText}>Store</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]}>
-          <Icon.Trash
+        <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]} onPress={logOut}>
+          <Icon.LogOut
             height={25}
             width={25}
             stroke={'white'}
             style={{marginRight: 15, marginLeft: 6}}
           />
           <Text style={[styles.infoHeaderButtonText, {color: 'white'}]}>
-            Delete Account
+            LogOut
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -274,10 +274,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   profileName: {
-    fontSize: 25,
+    fontSize: 22,
     color: Colors.dark,
     fontFamily: 'Poppins-SemiBold',
-    marginTop:-10
+    marginTop:-5
   },
   profileLocation: {
     fontSize: 12,
@@ -404,7 +404,8 @@ const styles = StyleSheet.create({
   },
   welcomeText:{
     color:Colors.dark,
-    fontSize:15,
-    fontFamily:'Poppins-Medium'
+    fontSize:13,
+    fontFamily:'Poppins-Medium',
+    marginBottom:4
   }
 });

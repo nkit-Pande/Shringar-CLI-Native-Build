@@ -8,10 +8,10 @@ export default function SkeletonItemCard() {
 
   return (
     <View style={styles.cardContainer}>
-    <ShimmerPlaceholder style={styles.image}/>
+    <ShimmerPlaceholder duration={3000}  style={styles.image}/>
     <View style={styles.textContainer}>
-      <ShimmerPlaceholder style={styles.productName} />
-      <ShimmerPlaceholder style={styles.productPrice} />
+      <ShimmerPlaceholder isReversed duration={3000} style={styles.productName} />
+      <ShimmerPlaceholder  duration={3000} style={styles.productPrice} />
     </View>
   </View>
   )
@@ -19,14 +19,14 @@ export default function SkeletonItemCard() {
 
 const styles = StyleSheet.create({
     cardContainer: {
-        flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         flexWrap: 'wrap',
-        width: 150,
+        width: 160,
         height: 200,
         backgroundColor: 'white',
-        margin: 10,
+        marginHorizontal: 10,
+        marginVertical:10,
         borderRadius: 5,
         shadowColor: 'black',
         shadowOpacity: 0.2,

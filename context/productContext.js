@@ -67,7 +67,7 @@ const ProductProvider = ({ children }) => {
         }
     };
 
-    
+
 
     const getProductByCategory = async (category) => {
         setIsLoading(true);
@@ -107,7 +107,8 @@ const ProductProvider = ({ children }) => {
         getProductsByName,
         getProductByCategory,
         getProductByMaterial,
-        getProductsById
+        getProductsById,
+        fetchProducts
     };
 
     return (

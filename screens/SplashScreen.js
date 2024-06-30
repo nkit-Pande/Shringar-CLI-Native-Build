@@ -1,26 +1,41 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect } from "react";
-import { ImageBackground } from "react-native-web";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
+import React, { useEffect } from "react";
+import { Colors } from "../color";
+import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
+
 export default function SplashScreen({ navigation }) {
-    useEffect(() => {
-      setTimeout(() => {
-        navigation.replace("Boarding");
-      }, 3000);
-    }, []);
+  useEffect(() => {
+    StatusBar.setHidden(true);
+    setTimeout(() => {
+      navigation.replace("Welcome");
+    }, 3000);
+
+    return () => {
+      StatusBar.setHidden(false);
+    };
+  }, []);
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" ,backgroundColor:"white"}}>
-        <Text
-          style={{ fontSize: 30, fontWeight: "500" }}
-        >
-          <Text style={{ color: "#F7DC6F", fontSize: 45, fontWeight: "900" }}>
-            S
-          </Text>
-          <Text>hringar</Text>
+    <LinearGradient colors={[Colors.primary,'white']} style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
+      <Animatable.Text delay={500} animation={'fadeInUp'} duration={1500} style={styles.headerText}>
+        <Text style={{ color: Colors.e_orange, fontSize: 60, fontFamily: 'GreatVibes-Regular' }}>
+          S
         </Text>
-    </View>
+        hringar
+      </Animatable.Text>
+    </LinearGradient>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerText: {
+    fontSize: 40,
+    color: Colors.e_orange,
+    fontFamily: 'Poppins-SemiBold',
+    textShadowColor: 'white',
+    textShadowOffset: { width: 2, height: 1 },
+    textShadowRadius: 1,
+    alignSelf: 'center',
+  },
+});

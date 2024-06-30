@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useCallback} from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,33 +9,51 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   FlatList,
-  Animated,
+  Alert,
+  Image,
+  Modal,
+  Button,
+  ActivityIndicator
 } from 'react-native';
 import * as Icon from 'react-native-feather';
-import {Colors} from '../color';
+import { Colors } from '../color';
 import ItemCard from '../components/ItemCard';
-import {useProduct} from '../context/productContext';
-import LinearGradient from 'react-native-linear-gradient';
-import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import { useProduct } from '../context/productContext';
 import SkeletonItemCard from '../components/SkeletonItemCard';
-export default function CategoryScreen({navigation}) {
+import NetInfo from '@react-native-community/netinfo';
+
+export default function CategoryScreen({ navigation }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const searchTextInput = useRef(null);
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     if (selectedCategory === 'All') {
-      getProductByCategory('All');
+      getProductByCategoryWithLoading("All");
     } else {
-      getProductByCategory(selectedCategory);
+      getProductByCategoryWithLoading(selectedCategory);
     }
     setRefreshing(false);
   }, [selectedCategory]);
-  const {products, page, setPage, getProductByCategory, getProductByMaterial} =
-    useProduct();
-  console.log(products);
+
+  const { products, page, setPage, getProductByCategory, getProductByMaterial, fetchProducts } = useProduct();
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+      console.log(state.type);
+      console.log(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleCategoryPress = category => {
     setSelectedCategory(category.title);
     category.press();
@@ -64,63 +82,75 @@ export default function CategoryScreen({navigation}) {
   const nextPage = () => {
     setPage(page + 1);
   };
-  // {id: 1, name: 'Rings'},.
-  // {id: 2, name: 'Earrings'},
-  // {id: 3, name: 'Bracelets'},.
-  // {id: 4, name: 'Mangalsutra'},
-  // {id: 5, name: 'Chains'},.
-  // {id: 6, name: 'Necklaces'},.
+
+  const fetchProductsWithLoading = async () => {
+    setLoading(true);
+    await fetchProducts();
+    setLoading(false);
+  };
+
+  const getProductByCategoryWithLoading = async (category) => {
+    setLoading(true);
+    await getProductByCategory(category);
+    setLoading(false);
+  };
+
+  const getProductByMaterialWithLoading = async (material) => {
+    setLoading(true);
+    await getProductByMaterial(material);
+    setLoading(false);
+  };
+
   const category = [
     {
       title: 'All',
       press: () => {
         setPage(1);
-        getProductByCategory('All');
+        fetchProductsWithLoading();
       },
     },
     {
       title: 'Rings',
       press: () => {
         setPage(1);
-        getProductByCategory('Rings');
+        getProductByCategoryWithLoading('Rings'||'Ring');
       },
     },
     {
       title: 'Necklaces',
       press: () => {
         setPage(1);
-        getProductByCategory('Necklaces');
+        getProductByCategoryWithLoading('Necklaces');
       },
     },
     {
       title: 'Bracelets',
       press: () => {
-        getProductByCategory('Bracelets');
+        getProductByCategoryWithLoading('Bracelets');
       },
     },
     {
       title: 'Chains',
       press: () => {
-        getProductByCategory('Chains');
+        getProductByCategoryWithLoading('Chains');
       },
     },
     {
       title: 'Mangalsutra',
       press: () => {
-        getProductByCategory('Mangalsutra');
+        getProductByCategoryWithLoading('Mangalsutra');
       },
     },
     {
       title: 'Earrings',
       press: () => {
-        getProductByCategory('Earrings');
+        getProductByCategoryWithLoading('Earrings');
       },
     },
   ];
-  // console.log(products)
 
   const renderFooter = () => {
-    if (products.length > 0) {
+    if (products.length > 9) {
       return (
         <View style={styles.footerContainer}>
           <TouchableOpacity style={styles.arrowButton} onPress={prevPage}>
@@ -138,94 +168,135 @@ export default function CategoryScreen({navigation}) {
       return null;
     }
   };
+
   useEffect(() => {
     setPage(1);
   }, [selectedCategory]);
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <KeyboardAvoidingView style={{flex: 1, backgroundColor: 'white'}}>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar
         animated={true}
-        barStyle={'dark-content'}
-        backgroundColor={Colors.primary}
+        barStyle={isConnected ? 'dark-content' : 'light-content'}
+        backgroundColor={isConnected ? Colors.primary : '#F50057'}
         hidden={false}
       />
 
-      {/* SearchBar */}
-      <View
-        style={{width: '100%', backgroundColor: Colors.primary}}>
-        <View style={{marginBottom: 10, paddingHorizontal: 10, marginTop: 10}}>
-          <View style={styles.searchContainer}>
-            <Icon.Search height={20} width={20} stroke={Colors.dark} />
-            <TextInput
-              ref={searchTextInput}
-              onFocus={handleSearchFocus}
-              onBlur={handleSearchBlur}
-              onSubmitEditing={handleSearchSubmit}
-              placeholder="Search"
-              placeholderTextColor={'grey'}
-              marginHorizontal={10}
-              style={styles.searchInput}
-            />
-            <View style={styles.verticleLine} />
-            <TouchableOpacity onPress={() => alert('Option Clicked')} style={{padding:10}}>
-              <Icon.Filter height={20} width={20} stroke={Colors.dark} />
-            </TouchableOpacity>
+      {isConnected ? (
+        <>
+          {/* SearchBar */}
+          <View style={{ width: '100%', backgroundColor: Colors.primary }}>
+            <View style={{ marginBottom: 10, paddingHorizontal: 10, marginTop: 10 }}>
+              <View style={styles.searchContainer}>
+                <Icon.Search height={20} width={20} stroke={Colors.dark} />
+                <TextInput
+                  ref={searchTextInput}
+                  onFocus={handleSearchFocus}
+                  onBlur={handleSearchBlur}
+                  onSubmitEditing={handleSearchSubmit}
+                  placeholder="Search"
+                  placeholderTextColor={'grey'}
+                  marginHorizontal={10}
+                  style={styles.searchInput}
+                />
+                <View style={styles.verticleLine} />
+                <TouchableOpacity onPress={showModal} style={{ padding: 10 }}>
+                  <Icon.Filter height={20} width={20} stroke={Colors.dark} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* Screen Options */}
+          <View
+            style={{
+              width: '100%',
+              backgroundColor: Colors.primary,
+              paddingBottom: 5,
+            }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ backgroundColor: 'transparent', paddingLeft: 10, paddingRight: 20, width: '100%' }}>
+              {category.map(category => (
+                <TouchableOpacity
+                  key={category.title}
+                  style={[
+                    styles.categoryContainer,
+                    selectedCategory === category.title &&
+                    styles.selectedCategoryContainer,
+                  ]}
+                  onPress={() => handleCategoryPress(category)}>
+                  <Text
+                    style={[
+                      styles.category,
+                      selectedCategory === category.title &&
+                      styles.selectedCategory,
+                    ]}>
+                    {category.title}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Item List */}
+          <View style={styles.productListContainer}>
+            {loading ? (
+              <ActivityIndicator size="large"  color={Colors.dark} />
+            ) : (
+              <FlatList
+                style={{ width: '100%' }}
+                data={products.length > 0 ? products : Array.from({ length: 6 })}
+                renderItem={({ item }) =>
+                  products.length > 0 ? (
+                    <ItemCard product={item} navigation={navigation} />
+                  ) : (
+                    <SkeletonItemCard />
+                  )
+                }
+                showsVerticalScrollIndicator={false}
+                numColumns={2}
+                ListFooterComponent={renderFooter}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                contentContainerStyle={[{ width: '100%' }]}
+              />
+            )}
+          </View>
+        </>
+      ) : (
+        <View style={styles.noInternetContainer}>
+          <Image source={require('../TestImages/nointernet.png')} style={styles.noInternetImage} />
+          <Text style={styles.noInternetText}>Please Check Your Internet Connection</Text>
+          <Text style={styles.noInternetSubText}>Make sure you are connected to a stable network and try again.</Text>
+        </View>
+      )}
+
+      {/* Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={hideModal}>
+        <View style={[styles.modalContainer, styles.shadow]}>
+          <TouchableOpacity style={styles.modelCloseButton}>
+            <Icon.X stroke={'white'} width={25} height={25} onPress={hideModal} />
+          </TouchableOpacity>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
           </View>
         </View>
-      </View>
-
-      {/* Screen Options */}
-      <View
-        style={{
-          width: '100%',
-          backgroundColor: Colors.primary,
-          paddingBottom: 5,
-        }}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{backgroundColor: 'transparent'}}>
-          {category.map(category => (
-            <TouchableOpacity
-              key={category.title}
-              style={[
-                styles.categoryContainer,
-                selectedCategory === category.title &&
-                  styles.selectedCategoryContainer,
-              ]}
-              onPress={() => handleCategoryPress(category)}>
-              <Text
-                style={[
-                  styles.category,
-                  selectedCategory === category.title &&
-                    styles.selectedCategory,
-                ]}>
-                {category.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-      {/* Item List  */}
-      <View style={styles.productListContainer}>
-        <FlatList
-          style={{width: '100%'}}
-          data={products.length > 0 ? products : Array.from({length: 10})}
-          renderItem={({item}) =>
-            products.length > 0 ? (
-              <ItemCard product={item} navigation={navigation} />
-            ) : (
-              <SkeletonItemCard />
-            )
-          }
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          ListFooterComponent={renderFooter}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -258,7 +329,8 @@ const styles = StyleSheet.create({
   categoryContainer: {
     backgroundColor: 'white',
     borderRadius: 50,
-    margin: 4,
+    marginHorizontal: 2,
+    marginVertical: 2,
     borderColor: 'black',
     borderWidth: 1,
   },
@@ -289,7 +361,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
-    flexWrap: 'wrap',
   },
   footerContainer: {
     marginTop: 5,
@@ -309,5 +380,57 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.dark,
     fontFamily: 'Poppins-Medium',
+  },
+  noInternetContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  noInternetImage: {
+    height: 200,
+    width: 200,
+  },
+  noInternetText: {
+    color: '#F50057',
+    fontSize: 15,
+    fontFamily: 'Poppins-SemiBold',
+  },
+  noInternetSubText: {
+    color: 'grey',
+    fontSize: 12,
+    fontFamily: 'Poppins-Medium',
+    marginTop: 5,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  modalContainer: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    bottom: 0,
+    position: 'absolute',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  modelCloseButton: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    height: 40,
+    width: 40,
+    backgroundColor: Colors.dark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

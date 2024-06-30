@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Alert,
   Dimensions,
@@ -14,13 +14,12 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import StepIndicator from 'react-native-step-indicator';
-import {Colors} from '../color';
+import { Colors } from '../color';
 import ItemCard from '../components/ItemCard';
 import * as Icon from 'react-native-feather';
-import {useProduct} from '../context/productContext';
+import { useProduct } from '../context/productContext';
 import SkeletonItemCard from '../components/SkeletonItemCard';
-
-
+import * as Animatable from 'react-native-animatable';
 const screenWidth = Dimensions.get('window').width;
 
 const dummyImage = [
@@ -44,20 +43,20 @@ const dummyProduct = {
   price: 320,
 };
 
-const renderCarousel = ({item}) => (
+const renderCarousel = ({ item }) => (
   <View>
     <Image
       source={item.image}
-      style={{width: screenWidth, height: 210}}
+      style={{ width: screenWidth, height: 210 }}
       resizeMode="cover"
     />
   </View>
 );
 
-const CategoryCard = ({name}) => (
+const CategoryCard = ({ name ,url}) => (
   <View style={styles.categoryCardContainer}>
     <Image
-      source={require('../TestImages/dummy.jpg')}
+      src={url}
       resizeMode="cover"
       style={styles.categoryImage}
     />
@@ -65,7 +64,7 @@ const CategoryCard = ({name}) => (
   </View>
 );
 
-const Carousel = ({currentPosition, setCurrentPosition}) => {
+const Carousel = ({ currentPosition, setCurrentPosition }) => {
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -76,7 +75,7 @@ const Carousel = ({currentPosition, setCurrentPosition}) => {
           newIndex = 0; // Reset index to loop back
         }
         setCurrentPosition(newIndex);
-        flatListRef.current.scrollToIndex({animated: true, index: newIndex});
+        flatListRef.current.scrollToIndex({ animated: true, index: newIndex });
       }
     }, 3000);
 
@@ -84,7 +83,7 @@ const Carousel = ({currentPosition, setCurrentPosition}) => {
   }, [currentPosition, setCurrentPosition]);
 
   return (
-    <View style={{marginBottom: 50}}>
+    <View style={{ paddingBottom: 50,backgroundColor:'white' }}>
       <FlatList
         ref={flatListRef}
         data={dummyImage}
@@ -117,8 +116,8 @@ const Carousel = ({currentPosition, setCurrentPosition}) => {
 };
 
 const Header = () => (
-  <View style={{backgroundColor: Colors.primary, padding: 10}}>
-    <Text style={styles.headerText}>
+  <Animatable.View style={{ backgroundColor: Colors.primary, padding: 10 }}>
+    <Animatable.Text delay={500} animation={'fadeInRight'} duration={1500} style={styles.headerText}>
       <Text
         style={{
           color: Colors.e_orange,
@@ -128,12 +127,12 @@ const Header = () => (
         S
       </Text>
       hringar
-    </Text>
-    <Text style={styles.subHeaderText}>Madhya Pradesh</Text>
-    <Text style={styles.headerBodyText} numberOfLines={5}>
+    </Animatable.Text>
+    <Animatable.Text delay={500} animation={'fadeInRight'} duration={1500} style={styles.subHeaderText}>Madhya Pradesh</Animatable.Text>
+    <Animatable.Text delay={500} animation={'fadeInRight'} duration={1500} style={styles.headerBodyText} numberOfLines={5}>
       Family-favorite sparkle, timeless treasures, and welcoming service await!
-    </Text>
-    <Image
+    </Animatable.Text>
+    <Animatable.Image
       source={require('../TestImages/nobg.jpg')}
       style={{
         height: 100,
@@ -142,12 +141,13 @@ const Header = () => (
         left: 30,
         top: 10,
       }}
+      delay={1500} animation={'fadeInLeft'} duration={1500}
     />
-  </View>
+  </Animatable.View>
 );
 
 const SearchBar = () => (
-  <View style={styles.searchContainer}>
+  <Animatable.View delay={1500} animation={'fadeIn'} duration={1500} style={styles.searchContainer}>
     <Icon.Search height={25} width={25} stroke={Colors.dark} />
     <TextInput
       placeholder="Search"
@@ -155,24 +155,25 @@ const SearchBar = () => (
       style={styles.searchInput}
     />
     <View style={styles.verticleLine} />
-    <TouchableOpacity onPress={() => alert('Option Clicked')} style={{paddingLeft:5}} >
+    <TouchableOpacity onPress={() => alert('Option Clicked')} style={{ paddingLeft: 5 }}>
       <Icon.Filter height={20} width={20} stroke={Colors.dark} />
     </TouchableOpacity>
-  </View>
+  </Animatable.View>
 );
 
-export default function DashBoard({navigation}) {
+export default function DashBoard({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(0);
-  const {products, page, setPage, getProductByCategory, getProductByMaterial} =
-    useProduct();
+  const [isConnected, setIsConnected] = useState(true);
+  const { products, page, setPage, getProductByCategory, getProductByMaterial } = useProduct();
 
   const categories = [
-    {id: 1, name: 'Rings'},
-    {id: 2, name: 'Earrings'},
-    {id: 3, name: 'Bracelets'},
-    {id: 4, name: 'Mangalsutra'},
-    {id: 5, name: 'Chains'},
-    {id: 6, name: 'Necklaces'},
+    { id: 1, name: 'Rings',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwfc4fb974/homepage/shopByCategory/fod-rings.jpg' },
+    { id: 2, name: 'Earrings',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw47b1df4b/homepage/shopByCategory/fod-earrings.jpg'  },
+    { id: 3, name: 'Bracelets' ,url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw4dcf3d1d/homepage/shopByCategory/fod-bracelet.jpg' },
+    { id: 4, name: 'Mangalsutra',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw114df9d7/homepage/shopByCategory/fod-mangalsutra.jpg' },
+    { id: 5, name: 'Chains',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwcbb3ebbb/homepage/shopByCategory/fod-chain.jpg'  },
+    { id: 6, name: 'Necklaces',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwb8086cf2/homepage/shopByCategory/fod-necklace.jpg'  },
+    { id: 7, name: 'Bangles',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw7dbdbacf/homepage/shopByCategory/fod-bangle.jpg'  },
   ];
 
   useEffect(() => {
@@ -184,6 +185,7 @@ export default function DashBoard({navigation}) {
           [{ text: "OK" }]
         );
       }
+      setIsConnected(state.isConnected);
       console.log(state.type);
       console.log(state.isConnected);
     });
@@ -195,84 +197,97 @@ export default function DashBoard({navigation}) {
     <View style={styles.container}>
       <StatusBar
         animated={true}
-        barStyle={'dark-content'}
-        backgroundColor={Colors.primary}
+        barStyle={isConnected ? 'dark-content' : 'light-content'}
+        backgroundColor={isConnected ? Colors.primary : 'red'}
         hidden={false}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        horizontal={false}
-        stickyHeaderIndices={[1]}>
-        <Header />
-        <View style={{paddingVertical: 10, paddingHorizontal: 10, backgroundColor: Colors.primary}}>
-          <SearchBar />
-        </View>
-        <Carousel
-          currentPosition={currentPosition}
-          setCurrentPosition={setCurrentPosition}
-        />
-        {/* Most Gifted */}
-        <View style={styles.majorContainer}>
-          <View style={styles.majorHeaderContainer}>
-            <Text style={styles.majorHeader}>Most Gifted</Text>
-            <View style={styles.divider} />
-          </View>
-          <FlatList
-            style={{width: '100%'}}
-            data={products.length > 0 ? products : Array.from({length: 10})}
-            renderItem={({item}) =>
-              products.length > 0 ? (
-                <ItemCard product={item} navigation={navigation} />
-              ) : (
-                <SkeletonItemCard />
-              )
-            }
-            showsVerticalScrollIndicator={false}
-            horizontal
-            contentContainerStyle={{paddingLeft: 10, paddingRight: 10}}
+      {isConnected ? (
+       
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          horizontal={false}
+          bounces={false}
+          // stickyHeaderIndices={[1]}
+          >
+          <View style={{backgroundColor:Colors.primary}}>
+          <Header />
+          {/* <View style={{ paddingVertical: 10, paddingHorizontal: 10, backgroundColor: Colors.primary }}>
+            <SearchBar />
+          </View> */}
+          <Carousel
+            currentPosition={currentPosition}
+            setCurrentPosition={setCurrentPosition}
           />
-        </View>
-        {/* Shop by Category */}
-        <View style={styles.shopCatContainer}>
-          <View style={styles.majorHeaderContainer}>
-            <Text style={styles.majorHeader}>Category</Text>
-            <View style={styles.divider} />
           </View>
-          <View style={styles.categoryCardGroup}>
-            {categories.map(category => (
-              <CategoryCard key={category.id} name={category.name} />
-            ))}
+          {/* Most Gifted */}
+          <Animatable.View delay={1000} animation={'fadeInUp'} duration={1500} style={styles.majorContainer}>
+            <View style={styles.majorHeaderContainer}>
+              <Text style={styles.majorHeader}>Top Products</Text>
+              <View style={styles.divider} />
+            </View>
+            <FlatList
+              style={{ width: '100%' }}
+              data={products.length > 0 ? products : Array.from({ length: 2 })}
+              renderItem={({ item }) =>
+                products.length > 0 ? (
+                  <ItemCard product={item} navigation={navigation} />
+                ) : (
+                  <SkeletonItemCard />
+                )
+              }
+              showsVerticalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={{ paddingLeft: 10, paddingRight: 3 }}
+            />
+          </Animatable.View>
+          {/* Shop by Category */}
+          <View style={styles.shopCatContainer}>
+            <View style={styles.majorHeaderContainer}>
+              <Text style={styles.majorHeader}>Top Category</Text>
+              <View style={styles.divider} />
+            </View>
+            <View style={styles.categoryCardGroup}>
+              {categories.map(category => (
+                <CategoryCard key={category.id} name={category.name} url={category.url} />
+              ))}
+            </View>
           </View>
-        </View>
-        {/* Most Sold */}
-        <View style={[styles.majorContainer, {paddingBottom: 10}]}>
-          <View style={styles.majorHeaderContainer}>
-            <Text style={styles.majorHeader}>Most Gifted</Text>
-            <View style={styles.divider} />
-          </View>
-          <FlatList
-            style={{width: '100%'}}
-            data={products.length > 0 ? products : Array.from({length: 10})}
-            renderItem={({item}) =>
-              products.length > 0 ? (
-                <ItemCard product={item} navigation={navigation} />
-              ) : (
-                <SkeletonItemCard />
-              )
-            }
-            showsVerticalScrollIndicator={false}
-            horizontal
-            contentContainerStyle={{paddingLeft: 10, paddingRight: 10}}
-          />
-        </View>
-      </ScrollView>
+          {/* Most Sold */}
+          <Animatable.View delay={1500} animation={'fadeInUp'} duration={1500} style={[styles.majorContainer, { paddingBottom: 2}]}>
+            <View style={styles.majorHeaderContainer}>
+              <Text style={styles.majorHeader}>Most Gifted</Text>
+              <View style={styles.divider} />
+            </View>
+            <FlatList
+              style={{}}
+              data={products.length > 0 ? products : Array.from({ length: 2 })}
+              renderItem={({ item }) =>
+                products.length > 0 ? (
+                  <ItemCard product={item} navigation={navigation} />
+                ) : (
+                  <SkeletonItemCard />
+                )
+              }
+              showsVerticalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={{ paddingLeft: 10, paddingRight: 10 }}
+            />
+          </Animatable.View>
+        </ScrollView>
+      ) : (
+        <View style={styles.noInternetContainer}>
+        <Image source={require('../TestImages/nointernet.png')} style={styles.noInternetImage} />
+        <Text style={styles.noInternetText}>Please Check Your Internet Connection</Text>
+        <Text style={styles.noInternetSubText}>Make sure you are connected to a stable network and try again.</Text>
+      </View>
+      )}
     </View>
   );
 }
 
 const customStyles = {
-  stepIndicatorSize: 10,
-  currentStepIndicatorSize: 10,
+  stepIndicatorSize: 7,
+  currentStepIndicatorSize: 7,
   separatorStrokeWidth: 0,
   currentStepStrokeWidth: 0,
   stepStrokeCurrentColor: Colors.dark,
@@ -302,7 +317,7 @@ const styles = StyleSheet.create({
     color: Colors.e_orange,
     fontFamily: 'Poppins-Medium',
     textShadowColor: 'white',
-    textShadowOffset: {width: 2, height: 1},
+    textShadowOffset: { width: 2, height: 1 },
     textShadowRadius: 1,
     alignSelf: 'flex-end',
   },
@@ -325,6 +340,7 @@ const styles = StyleSheet.create({
   },
   majorContainer: {
     marginVertical: 12,
+    backgroundColor:'white'
   },
   majorHeaderContainer: {
     alignItems: 'center',
@@ -341,20 +357,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.e_orange,
     fontFamily: 'Poppins-SemiBold',
-    marginVertical: 2,
+    marginVertical: 0,
+    marginBottom: -10,
+    marginTop: 20
   },
   shopCatContainer: {
     marginVertical: 15,
   },
   categoryCardContainer: {
-    height: 150,
-    width: 150,
     marginHorizontal: 10,
     marginVertical: 10,
     backgroundColor: 'white',
     borderRadius: 7,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
@@ -365,13 +381,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   categoryImage: {
-    height: 120,
+    height: 130,
     width: 140,
     alignSelf: 'center',
-    borderWidth: 1,
+    borderWidth: 0.2,
     borderColor: 'black',
     marginTop: 5,
     borderRadius: 7,
+    margin:10
   },
   categoryCardText: {
     color: Colors.dark,
@@ -401,5 +418,28 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: Colors.dark,
     margin: 8,
+  },
+  noInternetContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  noInternetImage: {
+    height: 200,
+    width: 200,
+  },
+  noInternetText: {
+    color: '#F50057',
+    fontSize: 15,
+    fontFamily: 'Poppins-SemiBold',
+  },
+  noInternetSubText: {
+    color: 'grey',
+    fontSize: 12,
+    fontFamily: 'Poppins-Medium',
+    marginTop: 5,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });

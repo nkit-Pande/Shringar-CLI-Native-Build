@@ -16,6 +16,10 @@ import { useUser } from "../../context/userContext";
 import { Colors } from "../../color";
 import * as Animatable from 'react-native-animatable';
 
+
+// ajaypanaskar8@gmail.com
+// Ilovemykid
+
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

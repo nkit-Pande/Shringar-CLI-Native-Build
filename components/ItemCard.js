@@ -124,14 +124,13 @@ export default function ItemCard({product, navigation}) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    flexWrap: 'wrap',
-    width: 150,
+    width: 160,
     height: 200,
     backgroundColor: Colors.primary,
-    margin: 10,
+    marginHorizontal: 10,
+    marginVertical:10,
     borderRadius: 5,
     shadowColor: 'black',
     shadowOpacity: 0.2,
