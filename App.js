@@ -14,6 +14,7 @@ import { WishlistProvider } from "./context/wishlistContext";
 import { CartProvider } from "./context/cartContext";
 import { ToastProvider } from 'react-native-toast-notifications';
 import WelcomeScreen from "./screens/WelcomeScreen";
+import TestingScreen from "./screens/TestingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +27,7 @@ export default function App() {
             <ProductProvider>
               <NavigationContainer>
                 <Stack.Navigator
-                  initialRouteName="Splash"
+                  initialRouteName="Starter"
                   screenOptions={{
                     headerShown: false,
                   }}
@@ -46,6 +47,7 @@ export default function App() {
                   />
                   <Stack.Screen name="SignUp" component={SignUpScreen} options={{ animation: "slide_from_left" }}/>
                   <Stack.Screen name="Starter" component={StarterScreen} />
+                  <Stack.Screen name="Test" component={TestingScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </ProductProvider>

@@ -5,7 +5,7 @@ import * as Icon from "react-native-feather";
 import { useCart } from "../context/cartContext";
 import { useWishlist } from "../context/wishlistContext";
 
-export default function ItemBox({ item, showRemove=false, showQuantity=false, showShadow=true }) {
+export default function ItemBox({ item, showRemove=false, showQuantity=false, showShadow=true,showLiked=false }) {
   const [counter, changeCounter] = useState(1);
   const hw = 25;
   const [ratingColor, setRatingColor] = useState("green");
@@ -51,6 +51,14 @@ export default function ItemBox({ item, showRemove=false, showQuantity=false, sh
       </TouchableOpacity>
     );
   };
+
+  const LikeButton = ()=>{
+    return(
+      <TouchableOpacity style={styles.likeButton}>
+        <Icon.Heart width={25} height={25} stroke={'red'} fill={'white'}/>
+      </TouchableOpacity>
+    )
+  }
 
   return (
     <View style={{ flexDirection: "row" }}>
@@ -226,5 +234,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingBottom: 10,
     paddingTop: 4
+  },
+  likeButton:{
+    position: "absolute",
+    alignSelf:'flex-end',
+    paddingRight:20,
+    right:0,
   }
 });

@@ -39,7 +39,7 @@ export default function ItemCard({product, navigation}) {
         setLiked(!liked);
       }
     } catch (error) {
-      console.error('Error toggling wishlist:', error);
+      console.log('Error toggling wishlist:', error);
       showToast('Error toggling wishlist');
     }
   };

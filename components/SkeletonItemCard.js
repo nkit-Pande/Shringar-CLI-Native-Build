@@ -8,10 +8,10 @@ export default function SkeletonItemCard() {
 
   return (
     <View style={styles.cardContainer}>
-    <ShimmerPlaceholder duration={3000}  style={styles.image}/>
+    <ShimmerPlaceholder duration={3000} style={styles.image} />
     <View style={styles.textContainer}>
-      <ShimmerPlaceholder isReversed duration={3000} style={styles.productName} />
-      <ShimmerPlaceholder  duration={3000} style={styles.productPrice} />
+      <ShimmerPlaceholder  stopAutoRun style={styles.productName} />
+      <ShimmerPlaceholder  stopAutoRun style={styles.productPrice} />
     </View>
   </View>
   )

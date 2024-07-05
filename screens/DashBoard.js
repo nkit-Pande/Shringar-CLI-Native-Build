@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useCallback } from 'react';
 import {
   Alert,
   Dimensions,
@@ -11,6 +11,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  RefreshControl
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import StepIndicator from 'react-native-step-indicator';
@@ -20,6 +21,9 @@ import * as Icon from 'react-native-feather';
 import { useProduct } from '../context/productContext';
 import SkeletonItemCard from '../components/SkeletonItemCard';
 import * as Animatable from 'react-native-animatable';
+import useToastNotification from '../helper/toast';
+
+
 const screenWidth = Dimensions.get('window').width;
 
 const dummyImage = [
@@ -83,7 +87,8 @@ const Carousel = ({ currentPosition, setCurrentPosition }) => {
   }, [currentPosition, setCurrentPosition]);
 
   return (
-    <View style={{ paddingBottom: 50,backgroundColor:'white' }}>
+    <Animatable.View delay={500} animation={'fadeInUp'} duration={1500}
+    style={{ paddingBottom: 50,backgroundColor:'white' }}>
       <FlatList
         ref={flatListRef}
         data={dummyImage}
@@ -111,7 +116,7 @@ const Carousel = ({ currentPosition, setCurrentPosition }) => {
           stepCount={dummyImage.length}
         />
       </View>
-    </View>
+    </Animatable.View>
   );
 };
 
@@ -164,7 +169,36 @@ const SearchBar = () => (
 export default function DashBoard({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [isConnected, setIsConnected] = useState(true);
-  const { products, page, setPage, getProductByCategory, getProductByMaterial } = useProduct();
+  const { products, page, setPage, getProductByCategory, getProductByMaterial,fetchProducts} = useProduct();
+  const [refreshing, setRefreshing] = useState(false);
+  const [isThreeSecondsPassed, setIsThreeSecondsPassed] = useState(false);
+  const { showToast } = useToastNotification();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsThreeSecondsPassed(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isThreeSecondsPassed) {
+      if (products.length === 0) {
+        console.log('1')
+        showToast("Server Not Responding");
+      }
+    }
+  }, [isThreeSecondsPassed, products]);
+  const onRefresh = async ()=> {
+    setRefreshing(true);
+    await fetchProducts();
+    setRefreshing(false);
+    if (products.length === 0) {
+      console.log('1')
+      showToast("Server Not Responding");
+    }
+  }
+  
 
   const categories = [
     { id: 1, name: 'Rings',url:'https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwfc4fb974/homepage/shopByCategory/fod-rings.jpg' },
@@ -207,6 +241,14 @@ export default function DashBoard({ navigation }) {
           showsVerticalScrollIndicator={false}
           horizontal={false}
           bounces={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[Colors.dark]}
+
+            />
+          }
           // stickyHeaderIndices={[1]}
           >
           <View style={{backgroundColor:Colors.primary}}>
