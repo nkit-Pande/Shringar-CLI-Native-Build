@@ -24,6 +24,7 @@ import * as Animatable from 'react-native-animatable';
 import useToastNotification from '../helper/toast';
 
 
+
 const screenWidth = Dimensions.get('window').width;
 
 const dummyImage = [
@@ -172,6 +173,7 @@ export default function DashBoard({ navigation }) {
   const { products, page, setPage, getProductByCategory, getProductByMaterial,fetchProducts} = useProduct();
   const [refreshing, setRefreshing] = useState(false);
   const [isThreeSecondsPassed, setIsThreeSecondsPassed] = useState(false);
+  // console.log(products)
   const { showToast } = useToastNotification();
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -184,7 +186,7 @@ export default function DashBoard({ navigation }) {
   useEffect(() => {
     if (isThreeSecondsPassed) {
       if (products.length === 0) {
-        console.log('1')
+        // console.log('1')
         showToast("Server Not Responding");
       }
     }
@@ -233,7 +235,6 @@ export default function DashBoard({ navigation }) {
         animated={true}
         barStyle={isConnected ? 'dark-content' : 'light-content'}
         backgroundColor={isConnected ? Colors.primary : 'red'}
-        hidden={false}
       />
       {isConnected ? (
        
@@ -353,6 +354,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    // paddingTop:20
   },
   headerText: {
     fontSize: 40,

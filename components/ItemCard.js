@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../color';
-import {Cpu, Heart} from 'react-native-feather';
+import {Cpu, Heart, Star} from 'react-native-feather';
 import {useToast} from 'react-native-toast-notifications';
 import {useWishlist} from '../context/wishlistContext';
+import { Icon } from 'react-native-paper';
 
 
 
@@ -11,6 +12,8 @@ export default function ItemCard({product, navigation}) {
   const [liked, setLiked] = useState(false);
   const {wishlistData, deleteItemFromWishlist, addItemToWishlist} =
     useWishlist();
+
+
 
 
   useEffect(() => {
@@ -53,10 +56,11 @@ export default function ItemCard({product, navigation}) {
       textStyle: {
         fontSize: 16,
         color: '#333',
+        fontFamily:'Poppins-SemiBold'
       },
       style: {
         backgroundColor: '#fff',
-        borderLeftWidth: 10,
+        borderLeftWidth: 20,
         borderLeftColor: Colors.dark,
         borderRadius: 8,
         padding: 16,
@@ -69,6 +73,8 @@ export default function ItemCard({product, navigation}) {
         paddingHorizontal: 20,
         alignSelf: 'center',
         marginBottom: 10,
+        borderWidth:2,
+        borderColor:Colors.dark
       },
       renderToast: toastOptions => (
         <View style={toastOptions.style}>
@@ -78,8 +84,12 @@ export default function ItemCard({product, navigation}) {
     });
   };
 
-  
-
+  const avgRating = product.avg_rating ? product.avg_rating : 0.0;
+  const ratingColorSetter = (rating) => {
+    if (rating >= 4) return Colors.success;
+    if (rating > 2 && rating < 4) return Colors.warning;
+    return "red";
+  };
 
   return (
     <TouchableOpacity
@@ -109,6 +119,17 @@ export default function ItemCard({product, navigation}) {
           </Text>
           {product.price}
         </Text>
+        <View style={{flexDirection:'row',padding:4,backgroundColor:ratingColorSetter(avgRating),borderRadius:5,marginBottom:5}}>
+          <Star stroke={'#FFD700'} fill={'#FFD700'} width={15} height={15} style={{paddingTop:19}}/>
+          <Text style={{fontFamily:'Poppins-Medium'}}> {avgRating} </Text>
+          <View style={{
+            width: 1,
+            height: 20,
+            backgroundColor: 'white', 
+            marginHorizontal:2
+          }}/>
+          <Text style={{fontFamily:'Poppins-Medium'}}> {product.review_count} </Text>
+        </View>
       </View>
       <TouchableOpacity style={styles.heart} onPress={() => toggleWishlist()}>
         <Heart
@@ -127,8 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: 160,
-    height: 200,
-    backgroundColor: Colors.primary,
+    backgroundColor: '#FAF2F2',
     marginHorizontal: 10,
     marginVertical:10,
     borderRadius: 5,
@@ -147,22 +167,22 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     width: '100%',
     paddingHorizontal: 5,
   },
   productName: {
-    fontSize: 13,
+    fontSize: 15,
     color: Colors.dark,
-    fontWeight: 'bold',
+    fontFamily:'Poppins-SemiBold',
+    textTransform:'capitalize'
   },
   productPrice: {
     fontSize: 13,
     fontWeight: '400',
-    color: Colors.e_orange,
-    fontWeight: 'bold',
+    color: 'grey',
     marginTop: 3,
-    alignSelf: 'center',
+    fontFamily:'Poppins-SemiBold'
   },
   heart: {
     position: 'absolute',

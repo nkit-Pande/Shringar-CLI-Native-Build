@@ -6,36 +6,51 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export default function SplashScreen({ navigation }) {
   useEffect(() => {
-    StatusBar.setHidden(true);
     setTimeout(() => {
       navigation.replace("Welcome");
-    }, 3000);
+    }, 3500);
 
     return () => {
-      StatusBar.setHidden(false);
     };
   }, []);
 
   return (
     <LinearGradient colors={[Colors.primary,'white']} style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
-      <Animatable.Text delay={500} animation={'fadeInUp'} duration={1500} style={styles.headerText}>
-        <Text style={{ color: Colors.e_orange, fontSize: 60, fontFamily: 'GreatVibes-Regular' }}>
-          S
-        </Text>
-        hringar
-      </Animatable.Text>
+      <StatusBar
+        animated={true}
+        barStyle={'dark-content'}
+        backgroundColor={Colors.primary}
+        hidden={false}/>
+      <Animatable.View delay={900} animation={'fadeInDown'} duration={2500} >
+        <View style={styles.headerTextContainer}>
+          <Animatable.Text delay={2500} animation={'swing'} duration={1000} style={styles.animatedText}>
+            S
+          </Animatable.Text>
+          <Text style={styles.headerText}>hringar</Text>
+        </View>
+      </Animatable.View>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  headerTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  animatedText: {
+    color: Colors.e_orange,
+    fontSize: 60,
+    fontFamily: 'GreatVibes-Regular',
+    width:60
+  },
   headerText: {
+    marginLeft:-1,
     fontSize: 40,
     color: Colors.e_orange,
     fontFamily: 'Poppins-SemiBold',
     textShadowColor: 'white',
     textShadowOffset: { width: 2, height: 1 },
     textShadowRadius: 1,
-    alignSelf: 'center',
   },
 });

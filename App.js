@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/CategoryScreen";
 import LoginScreen from "./screens/Login/LoginScreen";
 import SignUpScreen from "./screens/SignUp/SignUpScreen";
 import SplashScreen from "./screens/SplashScreen";
@@ -27,14 +26,14 @@ export default function App() {
             <ProductProvider>
               <NavigationContainer>
                 <Stack.Navigator
-                  initialRouteName="Starter"
+                  initialRouteName="Splash"
                   screenOptions={{
                     headerShown: false,
                   }}
                 >
                   <Stack.Screen name="Boarding" component={BoardingScreen} />
                   <Stack.Screen name="Splash" component={SplashScreen} />
-                  <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                  <Stack.Screen name="Welcome" options={{ animation: "none" }} component={WelcomeScreen} />
                   <Stack.Screen
                     name="Login"
                     component={LoginScreen}
@@ -45,6 +44,7 @@ export default function App() {
                     component={ItemDescription}
                     options={{ animation: "slide_from_bottom" }}
                   />
+                  
                   <Stack.Screen name="SignUp" component={SignUpScreen} options={{ animation: "slide_from_left" }}/>
                   <Stack.Screen name="Starter" component={StarterScreen} />
                   <Stack.Screen name="Test" component={TestingScreen} />

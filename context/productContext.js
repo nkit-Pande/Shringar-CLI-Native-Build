@@ -62,7 +62,8 @@ const ProductProvider = ({children}) => {
       const response = await productService.getProductByName(name);
       setProducts([response.data]);
     } catch (error) {
-      showToast('Server Not Responding!!')
+      // showToast('Server Not Responding!!')
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +121,7 @@ const ProductProvider = ({children}) => {
     getProductByMaterial,
     getProductsById,
     fetchProducts,
+    setProducts
   };
 
   return (

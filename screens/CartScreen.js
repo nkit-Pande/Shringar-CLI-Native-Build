@@ -91,8 +91,6 @@ export default function CartScreen({navigation,route}) {
   const handlePayment = async () => {
     try {
       console.log('Payment process started.');
-
-      // Get user data
       const {fullname, email, address, city, state} = userData;
 
       const paymentPayload = {

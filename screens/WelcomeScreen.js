@@ -9,13 +9,15 @@ export default function WelcomeScreen({navigation}) {
       <StatusBar
         animated={true}
         barStyle={"dark-content"}
-        backgroundColor={'#EDC7DA'}
-        hidden={false}
+        backgroundColor={Colors.primaryL}
       />
       <ImageBackground
-        source={require('../TestImages/nobg1.jpg')}
+        source={require('../TestImages/nobg.jpg')}
         style={styles.bgImage}
-        resizeMode="cover">
+        blurRadius={20}
+        resizeMode="cover"
+        
+        >
         
         <Animatable.Image
           source={require('../TestImages/nobg1.jpg')}
@@ -26,6 +28,7 @@ export default function WelcomeScreen({navigation}) {
           iterationDelay={0}
           delay={0}
           resizeMode="cover"
+          blurRadius={0.4}
         />
         
       </ImageBackground>
@@ -46,6 +49,7 @@ export default function WelcomeScreen({navigation}) {
           delay={4000}
           >
           <Text
+          delay={4000}
             style={{
               color: Colors.e_orange,
               fontSize: 90,
@@ -59,6 +63,7 @@ export default function WelcomeScreen({navigation}) {
 
       <Animatable.View 
         animation="fadeInUp" 
+        delay={1500}
         duration={1500} 
         style={styles.loginContainer}>
           <TouchableOpacity style={styles.loginButton} onPress={()=>navigation.navigate('Login')}>
@@ -69,7 +74,7 @@ export default function WelcomeScreen({navigation}) {
 
           <TouchableOpacity style={styles.signUpButton} onPress={()=>navigation.navigate('SignUp')}>
               <Text style={styles.signUpText}>
-                Sign Up
+                SignUp
               </Text>
           </TouchableOpacity>
       </Animatable.View>
@@ -112,8 +117,10 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 40,
     fontFamily: 'Poppins-SemiBold',
-    textAlign: 'center',
-    color: 'white'
+    textAlign: 'right',
+    color: 'white',
+    width:'83%',
+    marginBottom:-26
   },
   headerText: {
     fontSize: 60,
@@ -128,34 +135,48 @@ const styles = StyleSheet.create({
   loginContainer: {
     position: 'absolute',
     alignItems: 'center',
-    bottom: 150,
-    width: '100%'
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius:50,
+    borderTopRightRadius:50,
+    backgroundColor:'white',
+    paddingBottom:40,
+    paddingTop:40,
+    borderWidth:4,
+    borderTopColor:Colors.e_orange,
+    borderRightWidth:0.5,
+    borderLeftWidth:0.5
   },
   loginButton: {
-    paddingHorizontal: 112,
-    paddingVertical: 10,
+    width:300,
+    height:65,
     backgroundColor: Colors.e_orange,
     borderWidth: 2,
-    borderRadius: 30,
+    borderRadius: 10,
     borderColor: 'white',
-    marginBottom: 10
+    marginBottom: 10,
+    alignItems:'center',
+    justifyContent:'center'
   },
   loginText: {
     color: 'white',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 20
   },
   signUpButton: {
-    paddingHorizontal: 100,
-    paddingVertical: 10,
+    width:300,
+    height:65,
     backgroundColor: 'white',
-    borderWidth: 2,
-    borderRadius: 30,
-    borderColor: Colors.e_orange,
+    borderWidth:2,
+    borderRadius: 10,
+    borderColor: Colors.rojo,
+    alignItems:'center',
+    justifyContent:'center'
   },
   signUpText: {
-    color: Colors.e_orange,
-    fontFamily: 'Poppins-SemiBold',
+    color: Colors.rojo,
+    fontFamily: 'Poppins-Medium',
     fontSize: 20
   }
+    
 });

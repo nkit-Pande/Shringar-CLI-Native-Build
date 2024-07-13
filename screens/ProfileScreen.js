@@ -15,6 +15,8 @@ import * as Icon from 'react-native-feather';
 import {Colors} from '../color';
 import ProfileForm from '../components/ProfileForm';
 import {useUser} from '../context/userContext';
+import * as Animatable from 'react-native-animatable'
+
 const Header = ({logOut}) => {
   return (
     <View
@@ -131,8 +133,9 @@ const InfoCard = ({
 export default function ProfileScreen({navigationMain, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInfoCardExpanded, setInfoCardExpanded] = useState(false);
+  const [isLogoutModalVisible, setLogoutModalVisible] = useState(false);
   const {logout, userData} = useUser();
-
+  
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -140,8 +143,13 @@ export default function ProfileScreen({navigationMain, navigation}) {
   const toggleInfoCard = () => {
     setInfoCardExpanded(!isInfoCardExpanded);
   };
-  console.log(userData)
-  const logOut = () => {
+
+  const toggleLogoutModal = () => {
+    setLogoutModalVisible(!isLogoutModalVisible);
+  };
+
+  const confirmLogout = () => {
+    toggleLogoutModal();
     logout();
     navigationMain.replace('Welcome');
   };
@@ -154,7 +162,7 @@ export default function ProfileScreen({navigationMain, navigation}) {
         backgroundColor={Colors.primary}
         hidden={false}
       />
-      <Header logOut={logOut} />
+      <Header logOut={toggleLogoutModal} />
       {/* {userData?.username} */}
       {/* {userData?.city},{userData?.state} */}
       <View style={styles.header}>
@@ -224,7 +232,7 @@ export default function ProfileScreen({navigationMain, navigation}) {
           <Text style={styles.infoHeaderButtonText}>Store</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]} onPress={logOut}>
+        <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]} onPress={toggleLogoutModal}>
           <Icon.LogOut
             height={25}
             width={25}
@@ -248,6 +256,28 @@ export default function ProfileScreen({navigationMain, navigation}) {
           </View>
         </View>
       </Modal>
+
+     <Modal
+   animationType="slide"
+   transparent={true}
+   visible={isLogoutModalVisible}
+   onRequestClose={toggleLogoutModal}>
+   
+   <Animatable.View animation={'bounceInUp'} style={[styles.modalContainer,{backgroundColor: 'transparent'}]}>
+     <View style={styles.logoutModalContent}>
+       <Text style={styles.logoutMessage}>Are you sure you want to logout?</Text>
+       <View style={styles.logoutButtonsContainer}>
+         <TouchableOpacity style={styles.logoutButton} onPress={confirmLogout}>
+           <Text style={styles.logoutButtonText}>Yes</Text>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.logoutButton} onPress={toggleLogoutModal}>
+           <Text style={styles.logoutButtonText}>No</Text>
+         </TouchableOpacity>
+       </View>
+     </View>
+   </Animatable.View>
+ </Modal>
+
     </ImageBackground>
   );
 }
@@ -407,5 +437,43 @@ const styles = StyleSheet.create({
     fontSize:13,
     fontFamily:'Poppins-Medium',
     marginBottom:4
-  }
+  },
+  logoutModalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  logoutMessage: {
+    fontSize: 18,
+    fontFamily: 'Poppins-SemiBold',
+    color: Colors.dark,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  logoutButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  logoutButton: {
+    backgroundColor: Colors.dark,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '45%',
+  },
+  logoutButtonText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: 'white',
+  },
 });

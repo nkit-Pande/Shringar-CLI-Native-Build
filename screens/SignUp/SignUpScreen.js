@@ -19,15 +19,14 @@ import { Colors } from "../../color";
 
 export default function SignUpScreen({ navigation }) {
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: Colors.primary }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <View
+      style={{ flex: 1, backgroundColor: 'white' }}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
           <StatusBar
-            animated={true}
+            // animated={true}
             barStyle={'dark-content'}
             hidden={false}
             backgroundColor={"white"}
@@ -37,7 +36,7 @@ export default function SignUpScreen({ navigation }) {
               animation="fadeInDown"
               duration={2000}
               style={styles.image}
-              source={require("../../images/splash/undraw_pfp.png")}
+              source={require("../../TestImages/signup.png")}
               resizeMode="cover"
             />
             <View style={{ marginTop: -20 }}>
@@ -49,10 +48,12 @@ export default function SignUpScreen({ navigation }) {
                   style={{ margin: 10 }}
                 />
                 <TextInput
-                  placeholder="UserName"
+                  placeholder="Username"
                   backgroundColor="transparent"
                   placeholderTextColor={Colors.charcoal}
                   style={styles.inputField}
+                  textContentType="name"
+                  cursorColor={Colors.e_orange}
                 />
               </Animatable.View>
               <Animatable.View animation="fadeInLeft" duration={1500} delay={200} style={styles.textFieldContainer}>
@@ -65,12 +66,14 @@ export default function SignUpScreen({ navigation }) {
                 <TextInput
                   placeholder="Email"
                   backgroundColor="transparent"
+                  textContentType="emailAddress"
                   placeholderTextColor={Colors.charcoal}
                   style={styles.inputField}
+                  cursorColor={Colors.e_orange}
                 />
               </Animatable.View>
               <Animatable.View animation="fadeInLeft" duration={1500} delay={400} style={styles.textFieldContainer}>
-                <Icon.Lock
+                <Icon.Key
                   stroke={Colors.e_orange}
                   width={25}
                   height={25}
@@ -81,7 +84,27 @@ export default function SignUpScreen({ navigation }) {
                   backgroundColor="transparent"
                   placeholderTextColor={Colors.charcoal}
                   style={styles.inputField}
+                  textContentType="password"
                   secureTextEntry={true}
+                  cursorColor={Colors.e_orange}
+                />
+              </Animatable.View>
+              <Animatable.View animation="fadeInLeft" duration={1500} delay={400} style={styles.textFieldContainer}>
+                <Icon.Key
+                  stroke={Colors.e_orange}
+                  width={25}
+                  height={25}
+                  style={{ margin: 10 }}
+                />
+                <TextInput
+                  placeholder="Confirm Password"
+                  backgroundColor="transparent"
+                   textContentType="password"
+                  
+                  placeholderTextColor={Colors.charcoal}
+                  style={styles.inputField}
+                  secureTextEntry={true}
+                  cursorColor={Colors.e_orange}
                 />
               </Animatable.View>
             </View>
@@ -94,7 +117,6 @@ export default function SignUpScreen({ navigation }) {
             </Animatable.View>
           </View>
         </ScrollView>
-      </TouchableWithoutFeedback>
       <View style={styles.topBar}>
         <TouchableOpacity style={styles.backButton}
             onPress={()=>navigation.pop()}
@@ -107,7 +129,7 @@ export default function SignUpScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -120,31 +142,35 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   image: {
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 150,
     marginTop: 90,
     marginBottom: 40,
-    borderRadius: 120,
-    borderWidth: 5,
+    // borderRadius: 120,
+    // borderWidth: 5,
     borderColor: Colors.e_orange,
-    padding: 10
+    padding: 10,
+    // alignSelf:'flex-start',
+    // marginHorizontal:40
   },
   textFieldContainer: {
     width: 300,
-    height: 50,
+    height: 55,
     borderWidth: 2,
-    borderRadius: 20,
+    borderRadius: 5,
     borderColor: Colors.e_orange,
     flexDirection: "row",
     margin: 5,
+    fontSize:16
   },
   button: {
-    paddingHorizontal: 50,
-    paddingVertical: 10,
+    width:250,
+    height:60,
     backgroundColor: Colors.e_orange,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 10,
+    justifyContent:'center'
   },
   buttonText: {
     textAlign: "center",
@@ -173,6 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor:Colors.e_orange,
     alignItems:"center",
     justifyContent:'center',
-    alignSelf:'flex-end'
+    alignSelf:'flex-end',
+    marginTop:30
   }
 });
