@@ -35,47 +35,7 @@ The mobile app includes the following features:
 
 ## Screenshots
 
-### Welcome Screen
-![Welcome](./screenshots/welcome.jpg)
-
-### Login Screen
-![Login](./screenshots/login.jpg)
-
-### Category Screen
-![Category](./screenshots/category.jpg)
-
-### Dashboard Screen
-![Dashboard](./screenshots/dashboard.jpg)
-
-### Detail Screen
-![Detail](./screenshots/detail.jpg)
-
-### Filter Screen
-![Filter](./screenshots/filter.jpg)
-
-### Account Screen
-![Account](./screenshots/account.jpg)
-
-### Cart Screen 1
-![Cart 1](./screenshots/cart1.jpg)
-
-### Cart Screen 2
-![Cart 2](./screenshots/cart2.jpg)
-
-### History Screen
-![History](./screenshots/history.jpg)
-
-### Order Screen
-![Order](./screenshots/order.jpg)
-
-### Payment Screen
-![Payment](./screenshots/payment.jpg)
-
-### Search Screen
-![Search](./screenshots/search.jpg)
-
-### Wishlist Screen
-![Wishlist](./screenshots/wishlist.jpg)
+<div style="display: flex; overflow-x: auto; gap: 10px;"> <img src="./screenshots/account.jpg" alt="Account" width="300"/> <img src="./screenshots/cart1.jpg" alt="Cart1" width="300"/> <img src="./screenshots/cart2.jpg" alt="Cart2" width="300"/> <img src="./screenshots/category.jpg" alt="Category" width="300"/> <img src="./screenshots/dashboard.jpg" alt="Dashboard" width="300"/> <img src="./screenshots/detail.jpg" alt="Detail" width="300"/> <img src="./screenshots/filter.jpg" alt="Filter" width="300"/> <img src="./screenshots/history.jpg" alt="History" width="300"/> <img src="./screenshots/login.jpg" alt="Login" width="300"/> <img src="./screenshots/order.jpg" alt="Order" width="300"/> <img src="./screenshots/payment.jpg" alt="Payment" width="300"/> <img src="./screenshots/search.jpg" alt="Search" width="300"/> <img src="./screenshots/welcome.jpg" alt="Welcome" width="300"/> <img src="./screenshots/wishlist.jpg" alt="Wishlist" width="300"/> </div>
 
 
 
