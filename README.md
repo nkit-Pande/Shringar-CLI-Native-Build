@@ -34,26 +34,51 @@ The mobile app includes the following features:
 - **Payment Integration**
 
 ## Screenshots
-The screenshots for the mobile app can be found in the `screenshots` directory of this repository.
 
-**Path:** `/screenshots`
+### Welcome Screen
+![Welcome](./screenshots/welcome.jpg)
 
-| Screen Name       | File Name       |
-|-------------------|-----------------|
-| Account Screen    | account.jpg     |
-| Cart Screen 1     | cart1.jpg       |
-| Cart Screen 2     | cart2.jpg       |
-| Category Screen   | category.jpg    |
-| Dashboard Screen  | dashboard.jpg   |
-| Detail Screen     | detail.jpg      |
-| Filter Screen     | filter.jpg      |
-| History Screen    | history.jpg     |
-| Login Screen      | login.jpg       |
-| Order Screen      | order.jpg       |
-| Payment Screen    | payment.jpg     |
-| Search Screen     | search.jpg      |
-| Welcome Screen    | welcome.jpg     |
-| Wishlist Screen   | wishlist.jpg    |
+### Login Screen
+![Login](./screenshots/login.jpg)
+
+### Category Screen
+![Category](./screenshots/category.jpg)
+
+### Dashboard Screen
+![Dashboard](./screenshots/dashboard.jpg)
+
+### Detail Screen
+![Detail](./screenshots/detail.jpg)
+
+### Filter Screen
+![Filter](./screenshots/filter.jpg)
+
+### Account Screen
+![Account](./screenshots/account.jpg)
+
+### Cart Screen 1
+![Cart 1](./screenshots/cart1.jpg)
+
+### Cart Screen 2
+![Cart 2](./screenshots/cart2.jpg)
+
+### History Screen
+![History](./screenshots/history.jpg)
+
+### Order Screen
+![Order](./screenshots/order.jpg)
+
+### Payment Screen
+![Payment](./screenshots/payment.jpg)
+
+### Search Screen
+![Search](./screenshots/search.jpg)
+
+### Wishlist Screen
+![Wishlist](./screenshots/wishlist.jpg)
+
+
+
 
 ## Other Modules
 For reference, here are links to the other modules of this project:
