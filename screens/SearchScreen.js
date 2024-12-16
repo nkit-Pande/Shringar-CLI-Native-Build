@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function SearchScreen({ navigation }) {
+export default function SearchScreen({ navigationMain,navigation }) {
   const [searchText, setSearchText] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -133,7 +133,7 @@ export default function SearchScreen({ navigation }) {
         </View>
         <Animatable.View animation={'bounceIn'}>
           <TouchableHighlight
-            onPress={() => navigation.pop()}
+            onPress={() => navigation.goBack()}
             style={styles.searchModalCloseButton}>
             <Icon.ArrowRight height={25} width={25} stroke={'white'} />
           </TouchableHighlight>

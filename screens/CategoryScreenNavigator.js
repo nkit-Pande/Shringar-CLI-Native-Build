@@ -17,7 +17,7 @@ export default function CategoryScreenNavigator({navigationMain}) {
         {props => <CategoryScreen {...props} navigation={navigationMain} />}
       </CStack.Screen>
       <CStack.Screen name="SearchBar">
-        {props => <SearchScreen {...props} navigation={navigationMain} />}
+        {props => <SearchScreen {...props} navigationMain={navigationMain} />}
       </CStack.Screen>
     </CStack.Navigator>
   );

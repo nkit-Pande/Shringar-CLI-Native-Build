@@ -16,6 +16,7 @@ import {
   Keyboard,
   TouchableHighlight,
   TouchableWithoutFeedback,
+  Alert
 } from 'react-native';
 import * as Icon from 'react-native-feather';
 import {Colors} from '../color';
@@ -24,17 +25,27 @@ import {useProduct} from '../context/productContext';
 import SkeletonItemCard from '../components/SkeletonItemCard';
 import * as Animatable from 'react-native-animatable';
 import Slider from '@react-native-community/slider';
-
+import NetInfo from '@react-native-community/netinfo';
 import ItemListBox from '../components/ItemListBox';
 
 
 export default function CategoryScreen({navigation}) {
+
+  const {
+    products,
+    page,
+    setPage,
+    getProductByCategory,
+    fetchProducts,
+  } = useProduct();
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([products]);
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
+  // console.log(products)
   const [refreshing, setRefreshing] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -51,9 +62,25 @@ export default function CategoryScreen({navigation}) {
   const [showPriceFiler, setShowPriceFiler] = useState(true);
   const [showCustomPriceFiler, setShowCustomPriceFiler] = useState(false);
 
-  console.log(filteredProducts)
+  // console.log(filteredProducts)
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert(
+          "No Internet Connection",
+          "Please check your internet connection and try again.",
+          [{ text: "OK" }]
+        );
+      }
+      setIsConnected(state.isConnected);
+      console.log(state.type);
+      console.log(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
 
   const handlePriceRangeSelection = range => {
@@ -85,12 +112,13 @@ export default function CategoryScreen({navigation}) {
     }
   };
 
-  // console.log(selectedFilter);
+ 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setSelectedFilter([-1])
     if (selectedCategory === 'All') {
       fetchProductsWithLoading();
+      setFilteredProducts(products)
     } else {
       getProductByCategoryWithLoading(selectedCategory);
     }
@@ -98,19 +126,12 @@ export default function CategoryScreen({navigation}) {
   }, [selectedCategory]);
 
 
-  const {
-    products,
-    page,
-    setPage,
-    getProductByCategory,
-    getProductByMaterial,
-    fetchProducts,
-    setProducts
-  } = useProduct();
+
 
 
   const handleCategoryPress = category => {
     setSelectedCategory(category.title);
+    setFilteredProducts(products)
     category.press();
   };
 
@@ -138,6 +159,7 @@ export default function CategoryScreen({navigation}) {
     setLoading(true);
     await fetchProducts();
     setLoading(false);
+    setFilteredProducts(products)
   };
 
   const getProductByCategoryWithLoading = async category => {
@@ -150,6 +172,7 @@ export default function CategoryScreen({navigation}) {
       await getProductByCategory(category);
       setLoading(false);
     }
+   
   };
 
 
@@ -162,6 +185,7 @@ export default function CategoryScreen({navigation}) {
         setPage(1);
         setSelectedCategory('All');
         fetchProductsWithLoading();
+        
       },
     },
     {
@@ -217,9 +241,9 @@ export default function CategoryScreen({navigation}) {
     },
   ];
   const renderFooter = () => {
-    console.log("L")
+    console.log(products.length)
     console.log(filteredProducts.length)
-    if ((filteredProducts.length > 9)) {
+    if ((filteredProducts.length > 9 && products.length > 9)) {
       return (
         <View style={styles.footerContainer}>
           {page !== 1 ? (
@@ -373,42 +397,49 @@ export default function CategoryScreen({navigation}) {
     onRefresh,
     navigation,
   }) => {
-    return layout ? (
-      <FlatList
-        style={{width: '100%'}}
-        data={products.length > 0 ? products : Array.from({length: 6})}
-        renderItem={({item}) =>
-          products.length > 0 ? (
-            <ItemListBox navigation={navigation} product={item} />
-          ) : (
-            <SkeletonItemCard />
-          )
-        }
-        showsVerticalScrollIndicator={false}
-        ListFooterComponent={renderFooter}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        contentContainerStyle={[{width: '100%'}]}
-      />
-    ) : (
-      <FlatList
-        style={{width: '100%'}}
-       data={selectedFilter.includes(-1) ? products : filteredProducts}
-        renderItem={({item}) =>
-          products.length > 0 ? (
-            <ItemCard product={item} navigation={navigation} layout={layout} />
-          ) : (
-            <SkeletonItemCard />
-          )
-        }
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        ListFooterComponent={renderFooter}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        contentContainerStyle={[{width: '100%'}]}
-      />
-    );
+    if(isConnected){
+      return layout ? (
+        <FlatList
+          style={{width: '100%'}}
+          data={products.length > 0 ? products : Array.from({length: 6})}
+          renderItem={({item}) =>
+            products.length > 0 ? (
+              <ItemListBox navigation={navigation} product={item} />
+            ) : (
+              <SkeletonItemCard />
+            )
+          }
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          contentContainerStyle={[{width: '100%'}]}
+        />
+      ) : (
+        <FlatList
+          style={{width: '100%'}}
+         data={filteredProducts}
+          renderItem={({item}) =>
+            products.length > 0 ? (
+              <ItemCard product={item} navigation={navigation} layout={layout} />
+            ) : (
+              <SkeletonItemCard />
+            )
+          }
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          ListFooterComponent={renderFooter}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          contentContainerStyle={[{width: '100%'}]}
+        />
+      );
+    }else{
+      <View>
+
+      </View>
+    }
+    
   };
 
   return (

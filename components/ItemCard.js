@@ -30,6 +30,8 @@ export default function ItemCard({product, navigation}) {
   }, [wishlistData, product.product_id]);
   const toast = useToast();
 
+  // console.log(product)
+
   const toggleWishlist = async () => {
     try {
       if (liked) {
