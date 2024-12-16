@@ -1,83 +1,118 @@
-<<<<<<< HEAD
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Shringar - Jewelry Store App
 
-# Getting Started
+Shringar is a collaborative full-stack jewelry store application. It is built using React, React Native, and Node.js with four distinct modules:
+1. **Website** (React)
+2. **Admin Panel** (React)
+3. **Mobile App** (React Native)
+4. **Backend** (Node.js, Private)
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+This repository specifically contains the **mobile app** build developed using **React Native CLI**.
 
-## Step 1: Start the Metro Server
+## About the Project
+The primary goal of Shringar is to provide a seamless jewelry shopping experience across web and mobile platforms. The project was developed collaboratively, where my specific responsibility was building the **mobile application**.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### Why React Native?
+The choice of React Native was intentional:
+- My teammate did not have prior experience with Android or Kotlin development.
+- React Native ensured the codebase remained accessible and easy to understand for my partner.
+- It also gave me an opportunity to learn React Native and enhance my skillset.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+### Expo and CLI Builds
+During development, we initially started with **Expo** but transitioned to **React Native CLI** midway. The reason for this shift was the need to integrate a **payment gateway**, which Expo's managed environment did not fully support at that time.
 
-```bash
-# using npm
-npm start
+This repository contains the **CLI build** of the project.
 
-# OR using Yarn
-yarn start
-```
+## Features
+The mobile app includes the following features:
+- **User Authentication** (Login & Registration)
+- **Product Categories**
+- **Product Details**
+- **Search and Filters**
+- **Shopping Cart**
+- **Order History**
+- **Wishlist**
+- **Payment Integration**
 
-## Step 2: Start your Application
+## Screenshots
+The screenshots for the mobile app can be found in the `screenshots` directory of this repository.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+**Path:** `/screenshots`
 
-### For Android
+| Screen Name       | File Name       |
+|-------------------|-----------------|
+| Account Screen    | account.jpg     |
+| Cart Screen 1     | cart1.jpg       |
+| Cart Screen 2     | cart2.jpg       |
+| Category Screen   | category.jpg    |
+| Dashboard Screen  | dashboard.jpg   |
+| Detail Screen     | detail.jpg      |
+| Filter Screen     | filter.jpg      |
+| History Screen    | history.jpg     |
+| Login Screen      | login.jpg       |
+| Order Screen      | order.jpg       |
+| Payment Screen    | payment.jpg     |
+| Search Screen     | search.jpg      |
+| Welcome Screen    | welcome.jpg     |
+| Wishlist Screen   | wishlist.jpg    |
 
-```bash
-# using npm
-npm run android
+## Other Modules
+For reference, here are links to the other modules of this project:
+- **Website:** [Shringar Frontend](https://github.com/Ajay8309/Shringar-Frontend)
+- **Admin Panel:** [Shringar Admin Panel](https://github.com/Ajay8309/Admin-panel)
 
-# OR using Yarn
-yarn android
-```
+## Backend
+The backend for Shringar is private and will not be shared publicly.
 
-### For iOS
+## Tech Stack
+- **React Native CLI** (Mobile App)
+- **React** (Website & Admin Panel)
+- **Node.js** (Backend)
 
-```bash
-# using npm
-npm run ios
+## External Libraries
+The mobile app leverages several external libraries to ensure smooth functionality and development efficiency, including:
+- **React Navigation**
+- **Axios**
+- **React Native Paper**
+- **React Native Razorpay**
+- **React Native Maps**
+- **React Native Toast Message**
+- **React Native Shimmer Placeholder**
+- **Date-fns**
+- **React Native Linear Gradient**
+- **React Native Safe Area Context**
+- **React Native Step Indicator**
+- **React Native Ratings**
+- **React Native Onboarding Swiper**
+- **React Native Feather**
+- **React Native Progress Steps**
+- **Async Storage**
 
-# OR using Yarn
-yarn ios
-```
+## Installation and Setup
+Follow these steps to set up the mobile application locally:
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/nkit-Pande/Shringar-CLI-Native-Build.git
+   cd Shringar-CLI-Native-Build
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+3. **Run the application**
+   - For Android:
+     ```bash
+     npx react-native run-android
+     ```
+   - For iOS:
+     ```bash
+     npx react-native run-ios
+     ```
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## Acknowledgments
+This project was a collaborative effort, and I'd like to acknowledge the contributions of my teammates for the web, admin, and backend modules.
 
-## Step 3: Modifying your App
+---
 
-Now that you have successfully run the app, let's modify it.
+If you have any questions or need further assistance, feel free to reach out!
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-=======
-# Shringar-Cli-Build
->>>>>>> c6d363d3bfe89b0ce703e90e3aae6502d2d63c51
